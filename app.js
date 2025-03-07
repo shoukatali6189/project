@@ -28,8 +28,7 @@ const dotenv = require('dotenv').config()
 
 
 mongoose.set('strictQuery', true);
-let url ='mongodb+srv://shoukatali6189:shou2001@cluster0.fahw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-mongoose.connect(url)
+mongoose.connect('mongodb+srv://shoukatali6189:shou2001@cluster0.fahw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 .then(()=>{console.log("DB connected")})
 .catch((err)=>{console.log(err)})
  
