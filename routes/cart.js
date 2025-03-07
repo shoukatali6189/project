@@ -38,9 +38,6 @@ router.delete('/user/:productId/cart', async (req, res) => {
 
         let { productId } = req.params;
         let currentUser = req.user._id
-
-
-        
         let user = await User.findByIdAndUpdate(currentUser, { $pull: { cart: productId } }, { new: true });
         req.flash('success', 'Product removed from cart');
         res.redirect('/user/cart');
@@ -62,7 +59,7 @@ router.get('/checkout', async (req, res) => {
             product_data: {
               name: 'T-shirt',
             },
-            unit_amount: 2000,
+            unit_amount: 2000*100,
           },
           quantity: 1,
         },
