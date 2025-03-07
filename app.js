@@ -38,7 +38,7 @@ mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true,
 })
 .then(()=>{console.log("DB connected")})
-.catch((err)=>{console.log(err)})
+.catch((err)=>{console.log(err,"server is not connected")})
  
 
 app.set('view engine' , 'ejs'); 
