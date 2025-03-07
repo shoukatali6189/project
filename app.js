@@ -66,7 +66,7 @@ let configSession = {
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI || 'mongodb+srv://shoukatali6189:shou2001@cluster0.fahw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', // Use correct URI
+        mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/myDatabase',
         collectionName: 'sessions',
         ttl: 7 * 24 * 60 * 60 // Session expiry time (7 days)
     }),
