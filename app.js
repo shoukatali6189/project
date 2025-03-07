@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -20,15 +22,21 @@ const productApi = require('./routes/api/productaAPI');
 
 
 //-----------------------------------------//
+require('dotenv').config();
 const session = require('express-session');
 const flash = require("connect-flash");
 const User = require('./models/User');  
 
-const dotenv = require('dotenv').config()
+
+
+const MongoStore = require('connect-mongo');
 
 
 mongoose.set('strictQuery', true);
-mongoose.connect('mongodb+srv://shoukatali6189:shou2001@cluster0.fahw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
 .then(()=>{console.log("DB connected")})
 .catch((err)=>{console.log(err)})
  
@@ -43,18 +51,36 @@ app.use(methodOverride('_method'));
 // seeding dummy data
 // seedDB();
 
+// let configSession = {
+//     secret: 'keyboard cat',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         htttponly: true,
+//         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+//         maxAge :7 * 24 * 60 * 60 * 1000,
+//     }
+// }
 let configSession = {
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI || 'mongodb+srv://shoukatali6189:shou2001@cluster0.fahw1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', // Use correct URI
+        collectionName: 'sessions',
+        ttl: 7 * 24 * 60 * 60 // Session expiry time (7 days)
+    }),
     cookie: {
-        htttponly: true,
+        httpOnly: true,
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-        maxAge :7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     }
-}
+};
 
 app.use(session(configSession));
+
+
+
 app.use(flash());
 
 
