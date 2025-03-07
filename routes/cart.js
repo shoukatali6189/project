@@ -3,6 +3,9 @@ const { isLoggedIn } = require('../middleware');
 const User = require('../models/User');
 const Product = require('../models/product');
 const router = express.Router();
+require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+// router.use(express.json())
 
 
 
@@ -30,7 +33,7 @@ router.post('/user/:productId/add',isLoggedIn, async (req, res) => {
     
 })
 
-router.delete('/user/:productId/cart',  async(req, res) => {
+router.delete('/user/:productId/cart', async (req, res) => {
     try {
 
         let { productId } = req.params;
@@ -43,15 +46,34 @@ router.delete('/user/:productId/cart',  async(req, res) => {
         res.redirect('/user/cart');
         
     }
-    catch(e){
-        res.status(500).render('error' , {err:e.message});
+    catch (e) {
+        res.status(500).render('error', { err: e.message });
     }
     
    
-})
+});
 
-
-
-
+router.get('/checkout', async (req, res) => {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'T-shirt',
+            },
+            unit_amount: 2000,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: 'http://localhost:4242/success',
+      cancel_url: 'http://localhost:4242/cancel',
+    });
+  
+    res.redirect(303, session.url);
+  });
+  
 
 module.exports = router;
