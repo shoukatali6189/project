@@ -38,7 +38,7 @@ mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true,
 })
 .then(()=>{console.log("DB connected")})
-.catch((err)=>{console.log(err,"server is not connected")})
+.catch((err)=>{console.log(err,"server is not connected")}) 
  
 
 app.set('view engine' , 'ejs'); 
@@ -113,9 +113,9 @@ app.get('/', (req, res) => {
 
 
 //----------------------------------------------------------------------------------------------------//
-
-app.listen(process.env.PORT,()=>{
-    console.log(`server connected at port : ${process.env.PORT}`);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT,()=>{
+    console.log(`server connected at port : ${PORT}`);
 })
 
 //----------------------------------------------------------------------------------------------------//
